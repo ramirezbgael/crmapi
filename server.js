@@ -48,12 +48,12 @@ app.post('/clients', async (req, res) => {
 
 // Endpoint para agregar un nuevo producto
 app.post('/products', async (req, res) => {
-    const { client_id, product_type, balance, created_at, status } = req.body;
+    const { client_id, product_name, description, interest_rate, created_at } = req.body;
 
     try {
         const result = await pool.query(
-            'INSERT INTO products (client_id, product_type, balance, created_at, status) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-            [client_id, product_type, balance, created_at, status]
+            'INSERT INTO products (client_id, product_name, description, interest_rate, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            [client_id, product_name, description, interest_rate, created_at]
         );
 
         res.status(201).json(result.rows[0]);
