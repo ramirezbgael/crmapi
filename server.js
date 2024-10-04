@@ -46,6 +46,23 @@ app.post('/clients', async (req, res) => {
     }
 });
 
+// Endpoint para agregar un nuevo producto
+app.post('/products', async (req, res) => {
+    const { client_id, product_type, balance, created_at, status } = req.body;
+
+    try {
+        const result = await pool.query(
+            'INSERT INTO products (client_id, product_type, balance, created_at, status) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            [client_id, product_type, balance, created_at, status]
+        );
+
+        res.status(201).json(result.rows[0]);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error al agregar el producto');
+    }
+});
+
 // Endpoint para obtener las transacciones de un cliente específico
 app.get('/transactions/:client_id', async (req, res) => {
     const { client_id } = req.params; // Obtiene el ID del cliente desde los parámetros de la ruta
