@@ -19,6 +19,18 @@ const pool = new Pool({
     port: process.env.DB_PORT,
 });
 
+// Endpoint para obtener todos los clientes
+app.get('/clients', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM clients'); // Consulta para obtener todos los clientes
+        res.status(200).json(result.rows); // Devuelve los clientes encontrados
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error al obtener los clientes');
+    }
+});
+
+
 // Endpoint para agregar un nuevo cliente
 app.post('/clients', async (req, res) => {
     const { name, email } = req.body; // Extrae los datos del cuerpo de la solicitud
@@ -31,6 +43,18 @@ app.post('/clients', async (req, res) => {
     } catch (err) {
         console.error(err); // Muestra el error en la consola
         res.status(500).send('Error al agregar el cliente'); // Responde con un error
+    }
+});
+
+// Endpoint para obtener las transacciones de un cliente específico
+app.get('/transactions/:client_id', async (req, res) => {
+    const { client_id } = req.params; // Obtiene el ID del cliente desde los parámetros de la ruta
+    try {
+        const result = await pool.query('SELECT * FROM transactions WHERE client_id = $1', [client_id]);
+        res.status(200).json(result.rows); // Devuelve las transacciones encontradas
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error al obtener las transacciones del cliente');
     }
 });
 
