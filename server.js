@@ -48,11 +48,11 @@ app.post('/clients', async (req, res) => {
 
 // Endpoint para agregar un producto
 app.post('/products', async (req, res) => {
-    const { client_id, product_name, description, interest_rate } = req.body; // Asegúrate de que estos sean los campos correctos
+    const { product_name, description, interest_rate, client_id } = req.body; // Asegúrate de que estos sean los campos correctos
     try {
         const result = await pool.query(
-            'INSERT INTO products (client_id, product_name, description, interest_rate, created_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING *',
-            [client_id, product_name, description, interest_rate]
+            'INSERT INTO products (product_name, description, interest_rate, client_id, created_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING *',
+            [product_name, description, interest_rate, client_id]
         );
         res.status(201).json(result.rows[0]);
     } catch (err) {
