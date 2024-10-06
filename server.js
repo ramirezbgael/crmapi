@@ -57,7 +57,7 @@ app.post('/products', async (req, res) => {
         res.status(201).json(result.rows[0]);
     } catch (err) {
         console.error(err);
-        res.status(500).send('Error al agregar el producto');
+        res.status(500).send('Error al agregar el producto 1');
     }
 });
 
